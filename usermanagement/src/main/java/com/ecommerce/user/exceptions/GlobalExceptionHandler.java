@@ -38,21 +38,5 @@ public class GlobalExceptionHandler {
 		
 	}
 	
-//
-//	@ExceptionHandler(MethodArgumentNotValidException.class)
-//	public ResponseEntity<ErrorResponse> handleValidationErrors(MethodArgumentNotValidException mex ,WebRequest request){
-//		String path = request.getDescription(false).replace("uri=", "");
-//		String errorMessage = mex.getBindingResult()
-//		.getFieldErrors()
-//		.stream()
-//		.map(error->error.getField()+" : "+ error.getDefaultMessage())
-//		.collect(Collectors.joining(", "));
-//		
-//		ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(),HttpStatus.BAD_REQUEST.getReasonPhrase(),errorMessage,path);
-//		
-//		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//				.body(errorResponse);
-//		
-//
-//	}
+
 }

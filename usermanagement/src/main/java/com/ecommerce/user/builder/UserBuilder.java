@@ -26,16 +26,7 @@ public class UserBuilder {
 				.build();
 	}
 	
-//	public static User buildUserFromUserUpdateRequest(User existingUser, UserUpdateRequest userUpdateRequest) {
-//		return User.builder()
-//				.userId(existingUser.getUserId())
-//				.password(existingUser.getPassword())
-//				.userName(userUpdateRequest.getUserName())
-//				.phoneNum(userUpdateRequest.getPhoneNum())
-//				.email(userUpdateRequest.getEmail())
-//				.address(buildAddressFromAddressUpdateRequest(existingUser.getAddress(), userUpdateRequest.getAddress()))
-//				.build();
-//	}
+
 
 	public static User buildUserFromUserUpdateRequest(User existingUser,UserUpdateRequest userUpdateRequest) {  
 		return User.builder()            
@@ -46,8 +37,10 @@ public class UserBuilder {
 				.phoneNum(userUpdateRequest.getPhoneNum() != null? userUpdateRequest.getPhoneNum() : existingUser.getPhoneNum())   
 				.role(existingUser.getRole())
 				.accountStatus(existingUser.getAccountStatus())
-				.address(buildAddressFromAddressUpdateRequest( existingUser.getAddress(),userUpdateRequest.getAddress()))           
-				.build(); }
+				.address(buildAddressFromAddressUpdateRequest( existingUser.getAddress(),userUpdateRequest.getAddress())) 
+				
+				.build();
+		}
 	 
     private static Address buildAddressFromAddressUpdateRequest(Address existingAddress, AddressUpdateRequest addressUpdateRequest) {
 		// TODO Auto-generated method stub

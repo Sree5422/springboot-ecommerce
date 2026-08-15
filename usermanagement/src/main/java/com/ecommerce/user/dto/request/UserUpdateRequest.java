@@ -29,7 +29,7 @@ public class UserUpdateRequest {
 	private String password;
 	
 	@NotBlank(message = "phone number is required")
-	@Pattern(regexp = "^[6-9][0-9]{10}$", message = "enter valid phone number")
+	@Pattern(regexp = "^[6-9][0-9]{9}$", message = "enter valid phone number")
 	private String phoneNum;
 	
 	@Valid

@@ -2,6 +2,7 @@ package com.ecommerce.user.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.user.builder.UserBuilder;
@@ -16,14 +17,17 @@ import com.ecommerce.user.repository.UserRepository;
 public class UserService {
 	
 	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 	
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository,PasswordEncoder passwordEncoder) {
 		this.userRepository=userRepository;
+		this.passwordEncoder=passwordEncoder;
 	}
 	
 	
 	public UserResponse save(UserCreateRequest userCreateRequest) {
 		User user= UserBuilder.buildUserFromCreateRequest(userCreateRequest);
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		 User savedUser = userRepository.save(user);
 		UserResponse userResponse = UserBuilder.buildUserResponseFromUser(savedUser);
 		return userResponse;
@@ -40,8 +44,9 @@ public class UserService {
 	
 	public UserResponse updateUserById(long userId, UserUpdateRequest updateRequest) {
 		User existingUser = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("User not found with userId"+ userId));
-	     User userFromUserUpdateRequest = UserBuilder.buildUserFromUserUpdateRequest(existingUser, updateRequest);
-	     User saved = userRepository.save(userFromUserUpdateRequest);
+	     User updatedUser = UserBuilder.buildUserFromUserUpdateRequest(existingUser, updateRequest);
+	     updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+	     User saved = userRepository.save(updatedUser);
 	     return UserBuilder.buildUserResponseFromUser(saved);
 	     
 	}
