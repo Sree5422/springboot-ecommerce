@@ -5,6 +5,7 @@ import com.ecommerce.user.dto.request.AddressUpdateRequest;
 import com.ecommerce.user.dto.request.UserCreateRequest;
 import com.ecommerce.user.dto.request.UserUpdateRequest;
 import com.ecommerce.user.dto.response.AddressResponse;
+import com.ecommerce.user.dto.response.AuthLoginResponse;
 import com.ecommerce.user.dto.response.UserResponse;
 import com.ecommerce.user.enums.AccountStatus;
 import com.ecommerce.user.enums.Role;
@@ -31,7 +32,8 @@ public class UserBuilder {
 	public static User buildUserFromUserUpdateRequest(User existingUser,UserUpdateRequest userUpdateRequest) {  
 		return User.builder()            
 				.userId(existingUser.getUserId())      
-				.password(existingUser.getPassword())        
+				.password(userUpdateRequest.getPassword())        
+
 				.userName(userUpdateRequest.getUserName() != null? userUpdateRequest.getUserName() : existingUser.getUserName())   
 				.email(userUpdateRequest.getEmail() != null? userUpdateRequest.getEmail(): existingUser.getEmail())     
 				.phoneNum(userUpdateRequest.getPhoneNum() != null? userUpdateRequest.getPhoneNum() : existingUser.getPhoneNum())   
@@ -94,5 +96,18 @@ public class UserBuilder {
 				.pincode(address.getPincode())
 				.build();
 	}
+	
+	//public static Us buildLoginReq
 
+	public static AuthLoginResponse buildAuthUserResponseFromUser(User user) {
+		// TODO Auto-generated method stub
+		
+		return AuthLoginResponse.builder()
+				.userId(user.getUserId())
+				.userName(user.getUserName())
+				.email(user.getEmail())
+				.role(user.getRole())
+				.accountStatus(user.getAccountStatus())
+								.build();
+	}
 }

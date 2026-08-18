@@ -16,8 +16,7 @@ public class GlobalExceptionHandler {
 	
 	public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex, WebRequest request){
 		String path=request.getDescription(false).replace("uri=", "");
-		System.out.println(ex);
-		System.out.println(request);
+		
 		ErrorResponse errorResponse= new ErrorResponse( HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), ex.getMessage(),path);
 		System.out.println(errorResponse);
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -38,5 +37,24 @@ public class GlobalExceptionHandler {
 		
 	}
 	
+	@ExceptionHandler(InvalidCredentialsException.class)
+	
+	public ResponseEntity<ErrorResponse> handleInvalidCredentialsException(InvalidCredentialsException ex, WebRequest request){
+		String path=request.getDescription(false).replace("uri=", "");
+		//System.out.println(path);
+		ErrorResponse errorResponse= new ErrorResponse( HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), ex.getMessage(),path);
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+				.body(errorResponse);
+	}
+	@ExceptionHandler(AccountNotActiveException.class)
+	
+	public ResponseEntity<ErrorResponse> handleAccountNotActiveException(AccountNotActiveException ex, WebRequest request){
+		String path=request.getDescription(false).replace("uri=", "");
+		//System.out.println(path);
+		ErrorResponse errorResponse= new ErrorResponse( HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase(), ex.getMessage(),path);
+		System.out.println(errorResponse);
 
+		return ResponseEntity.status(HttpStatus.FORBIDDEN)
+				.body(errorResponse);
+	}
 }
