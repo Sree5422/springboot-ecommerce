@@ -19,5 +19,6 @@ public class AuthLoginResponse {
 	private String email;
 	private Role role;
 	private AccountStatus accountStatus;
+	private String accessToken;
 
 }

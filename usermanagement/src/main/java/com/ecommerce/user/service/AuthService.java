@@ -18,17 +18,24 @@ public class AuthService {
 
 	private final UserRepository repository;
 	private final PasswordEncoder passwordEncoder;
+	private final JwtService jwtService;
 
-	public AuthService(UserRepository repository,PasswordEncoder passwordEncoder) {
+	public AuthService(UserRepository repository,PasswordEncoder passwordEncoder, JwtService jwtService) {
 		this.repository = repository;
 		this.passwordEncoder = passwordEncoder;
+		this.jwtService = jwtService;
 	}
 
 	public AuthLoginResponse loginUser(AuthLoginRequest authLoginRequest) { //newupdatedDetails
 		String loginEmail = authLoginRequest.getEmail();
 		User userByEmail = repository.findUserByEmail(loginEmail); //oldDBdetails
 		
+		System.out.println("User found: " + (userByEmail != null));
 
+		if (userByEmail != null) {
+		    System.out.println("Email: " + userByEmail.getEmail());
+		    System.out.println("Status: " + userByEmail.getAccountStatus());
+		}
 	  //  System.out.println("Email received: " + loginEmail);
 	 //   System.out.println("User found: " + (userByEmail != null));
 
@@ -45,7 +52,11 @@ public class AuthService {
 		if(AccountStatus.ACTIVE != userByEmail.getAccountStatus())
 		    throw new AccountNotActiveException("User is Not Active");
 		
+		String token = jwtService.generateToken(userByEmail);
+		System.out.println(token);
 		AuthLoginResponse authLoginResponse = UserBuilder.buildAuthUserResponseFromUser(userByEmail);
+		authLoginResponse.setAccessToken(token);
+	
 		return authLoginResponse;		
 		
 	}
