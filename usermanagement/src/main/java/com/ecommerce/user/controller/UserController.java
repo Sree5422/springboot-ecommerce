@@ -2,6 +2,7 @@ package com.ecommerce.user.controller;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -29,7 +30,6 @@ public class UserController {
 		this.userService=userService;
 		
 	}
-	
 	@PostMapping
 	
 	public UserResponse saveUser(@RequestBody @Valid UserCreateRequest userCreateRequest) {
@@ -37,7 +37,7 @@ public class UserController {
 	}
 
 	@GetMapping
-	
+	@PreAuthorize("hasRole('ADMIN')")
 	public List<UserResponse> getUsers() {
 		System.out.println("User called");
 		return userService.getAllUsers();
@@ -45,16 +45,18 @@ public class UserController {
 	}
 	
 	@GetMapping("/{userId}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public UserResponse getUserById(@PathVariable long userId) {
 		return userService.getUserById(userId);
 	}
 	
 	@PatchMapping("/{userId}")
-	
+	@PreAuthorize("hasRole('ADMIN')")
 	public UserResponse updateUserById(@PathVariable long userId, @RequestBody @Valid UserUpdateRequest updateRequest) {
 		return userService.updateUserById(userId, updateRequest);
 	}
 	@DeleteMapping("/{userId}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteByUserId(@PathVariable long userId) {
 		return userService.deleteByUserId(userId);
 	}
