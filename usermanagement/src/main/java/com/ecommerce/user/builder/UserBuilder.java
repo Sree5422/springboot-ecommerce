@@ -99,7 +99,7 @@ public class UserBuilder {
 	
 	//public static Us buildLoginReq
 
-	public static AuthLoginResponse buildAuthUserResponseFromUser(User user) {
+	public static AuthLoginResponse buildAuthUserResponseFromUser(User user,String token) {
 		// TODO Auto-generated method stub
 		
 		return AuthLoginResponse.builder()
@@ -108,6 +108,7 @@ public class UserBuilder {
 				.email(user.getEmail())
 				.role(user.getRole())
 				.accountStatus(user.getAccountStatus())
+				.token(token)
 								.build();
 	}
 }

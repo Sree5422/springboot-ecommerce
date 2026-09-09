@@ -39,7 +39,9 @@ public class UserController {
 	@GetMapping
 	
 	public List<UserResponse> getUsers() {
+		System.out.println("User called");
 		return userService.getAllUsers();
+		
 	}
 	
 	@GetMapping("/{userId}")

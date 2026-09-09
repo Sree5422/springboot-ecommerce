@@ -52,14 +52,14 @@ public class User {
     
     private Address address;
 
-	public User(String userName, String email, String password, String phoneNum, Address address) {
-		super();
-		this.userName = userName;
-		this.email = email;
-		this.password = password;
-		this.phoneNum = phoneNum;
-		this.address = address;
-	}
+//	public User(String userName, String email, String password, String phoneNum, Address address) {
+//		super();
+//		this.userName = userName;
+//		this.email = email;
+//		this.password = password;
+//		this.phoneNum = phoneNum;
+//		this.address = address;
+//	}
 
 	public User(String userName, String email, String password, String phoneNum) {
 		super();

@@ -34,6 +34,8 @@ public class UserService {
 	}
 	
 	public List<UserResponse> getAllUsers(){
+		System.out.println("User Service called");
+
 		return userRepository.findAll()
 							  .stream()
 							  .map(UserBuilder::buildUserResponseFromUser)

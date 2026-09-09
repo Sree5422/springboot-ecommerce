@@ -54,13 +54,12 @@ public class AuthService {
 		
 		String token = jwtService.generateToken(userByEmail);
 		System.out.println(token);
-		AuthLoginResponse authLoginResponse = UserBuilder.buildAuthUserResponseFromUser(userByEmail);
-		authLoginResponse.setAccessToken(token);
+		AuthLoginResponse authLoginResponse = UserBuilder.buildAuthUserResponseFromUser(userByEmail,token);
 	
 		return authLoginResponse;		
 		
 	}
 
-
+	
 	
 }
