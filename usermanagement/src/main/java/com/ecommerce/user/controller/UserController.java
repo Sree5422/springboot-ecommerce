@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.user.dto.request.UserCreateRequest;
+import com.ecommerce.user.dto.request.UserRoleStatusUpdateRequest;
 import com.ecommerce.user.dto.request.UserUpdateRequest;
 import com.ecommerce.user.dto.response.UserResponse;
 import com.ecommerce.user.service.UserService;
@@ -59,5 +60,11 @@ public class UserController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteByUserId(@PathVariable long userId) {
 		return userService.deleteByUserId(userId);
+	}
+
+	@PatchMapping("/{userId}/role-status")
+	@PreAuthorize("hasRole('ADMIN')")
+	public UserResponse updateRoleStatus(@PathVariable long userId, @RequestBody @Valid UserRoleStatusUpdateRequest roleStatusUpdateRequest) {
+		return userService.updateRoleStatus(userId,roleStatusUpdateRequest);
 	}
 }

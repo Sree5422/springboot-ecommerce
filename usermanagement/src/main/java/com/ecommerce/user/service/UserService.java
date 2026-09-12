@@ -1,12 +1,15 @@
 package com.ecommerce.user.service;
 
+import java.awt.font.NumericShaper.Range;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.user.builder.UserBuilder;
 import com.ecommerce.user.dto.request.UserCreateRequest;
+import com.ecommerce.user.dto.request.UserRoleStatusUpdateRequest;
 import com.ecommerce.user.dto.request.UserUpdateRequest;
 import com.ecommerce.user.dto.response.UserResponse;
 import com.ecommerce.user.exceptions.UserNotFoundException;
@@ -73,12 +76,18 @@ public class UserService {
 //		UserBuilder.buildUserResponseFromUser(deleteUser);
 		
 	}
-	
-	
-	
-	
-	
-	
+
+
+	public UserResponse updateRoleStatus(long userId, UserRoleStatusUpdateRequest roleStatusUpdateRequest) {
+	 User existingUser = userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("User not present with this Id"));
+	 existingUser.setAccountStatus(roleStatusUpdateRequest.getAccountStatus());
+	 existingUser.setRole(roleStatusUpdateRequest.getRole());
+	 System.out.println(existingUser);
+	 User updatedUser = userRepository.save(existingUser);
+	 System.out.println(updatedUser);
+
+		return UserBuilder.buildUserResponseFromUser(updatedUser);
+	}	
 	
 	
 }
