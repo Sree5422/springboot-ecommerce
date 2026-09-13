@@ -1,9 +1,12 @@
 package com.ecommerce.user.service;
 
-import java.awt.font.NumericShaper.Range;
+import com.ecommerce.user.security.JwtAuthFilter;
 import java.util.List;
 import java.util.Optional;
 
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +22,14 @@ import com.ecommerce.user.repository.UserRepository;
 @Service
 public class UserService {
 	
+	private final JwtAuthFilter jwtAuthFilter;
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	
-	public UserService(UserRepository userRepository,PasswordEncoder passwordEncoder) {
+	public UserService(UserRepository userRepository,PasswordEncoder passwordEncoder, JwtAuthFilter jwtAuthFilter) {
 		this.userRepository=userRepository;
 		this.passwordEncoder=passwordEncoder;
+		this.jwtAuthFilter = jwtAuthFilter;
 	}
 	
 	
@@ -87,6 +92,22 @@ public class UserService {
 	 System.out.println(updatedUser);
 
 		return UserBuilder.buildUserResponseFromUser(updatedUser);
+	}
+
+
+	public UserResponse getMyProfile() {
+	
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println(authentication);
+		String email = authentication.getName();
+		System.out.println(email);
+		System.out.println(authentication.getAuthorities());
+		  System.out.println( authentication.getPrincipal());
+		    User userByEmail = userRepository.findUserByEmail(email);
+		    									//.orElseThrow(()->new UserNotFoundException("User not found with this email: "+ email));
+		   
+				  							
+		return UserBuilder.buildUserResponseFromUser(userByEmail);
 	}	
 	
 	

@@ -67,4 +67,10 @@ public class UserController {
 	public UserResponse updateRoleStatus(@PathVariable long userId, @RequestBody @Valid UserRoleStatusUpdateRequest roleStatusUpdateRequest) {
 		return userService.updateRoleStatus(userId,roleStatusUpdateRequest);
 	}
+	@GetMapping("/me")
+	//@PreAuthorize("hasRole('ADMIN')")
+	public UserResponse getMyProfile() {
+		return userService.getMyProfile();
+		
+	}
 }

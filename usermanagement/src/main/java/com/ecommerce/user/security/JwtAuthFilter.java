@@ -28,7 +28,6 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		String header = request.getHeader("Authorization");
 		System.out.println("Authorization Header = " + header);
 		
@@ -36,7 +35,7 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 			filterChain.doFilter(request, response);
 			return;
 		}
-		  System.out.println("JWT validation SUCCESS");
+		  System.out.println("JWT token received");
 		  String token = header.substring(7);
 			System.out.println("Token extracted = " + token);
 
