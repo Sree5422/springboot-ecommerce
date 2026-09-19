@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecommerce.user.dto.request.ChangePasswordRequest;
 import com.ecommerce.user.dto.request.MyProfileUpdateRequest;
 import com.ecommerce.user.dto.request.UserCreateRequest;
 import com.ecommerce.user.dto.request.UserRoleStatusUpdateRequest;
@@ -77,5 +78,11 @@ public class UserController {
 	@PatchMapping("/me")
 	public UserResponse updateProfile(@RequestBody @Valid MyProfileUpdateRequest myProfileUpdateRequest) {
 		return userService.updateProfile(myProfileUpdateRequest);
+	}
+	
+	@PutMapping("/me/password")
+	public String updatePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest) {
+		 userService.updatePassword(changePasswordRequest);
+		 return "Password updated Successfully";
 	}
 }

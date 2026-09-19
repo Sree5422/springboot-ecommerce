@@ -66,5 +66,14 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 							.body(errorResponse);
 	}
+	
+	@ExceptionHandler(InvalidUserException.class)
+	
+	public ResponseEntity<ErrorResponse> handleInvalidUserException(InvalidUserException ex,WebRequest request){
+		String path = request.getDescription(false).replace("uri=", "");
+	   ErrorResponse errorResponse= new ErrorResponse(HttpStatus.UNAUTHORIZED.value(),HttpStatus.UNAUTHORIZED.getReasonPhrase(),ex.getMessage(),path);
+	   return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+			   									.body(errorResponse);
+	}
 
 }

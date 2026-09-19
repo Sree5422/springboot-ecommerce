@@ -1,6 +1,9 @@
 package com.ecommerce.user.service;
 
 import com.ecommerce.user.security.JwtAuthFilter;
+
+import jakarta.validation.Valid;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -11,11 +14,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.user.builder.UserBuilder;
+import com.ecommerce.user.dto.request.ChangePasswordRequest;
 import com.ecommerce.user.dto.request.MyProfileUpdateRequest;
 import com.ecommerce.user.dto.request.UserCreateRequest;
 import com.ecommerce.user.dto.request.UserRoleStatusUpdateRequest;
 import com.ecommerce.user.dto.request.UserUpdateRequest;
 import com.ecommerce.user.dto.response.UserResponse;
+import com.ecommerce.user.exceptions.InvalidUserException;
 import com.ecommerce.user.exceptions.UserNotFoundException;
 import com.ecommerce.user.model.User;
 import com.ecommerce.user.repository.UserRepository;
@@ -127,6 +132,27 @@ public class UserService {
 	    User savedUser = userRepository.save(updatedUser);
 
 	    return UserBuilder.buildUserResponseFromUser(savedUser);
+	}
+
+
+	public void updatePassword(@Valid ChangePasswordRequest changePasswordRequest) {	
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String namemail = authentication.getName();
+		System.out.println(namemail);
+		User user = userRepository.findUserByEmail(namemail);
+		if (user == null) {
+		    throw new UserNotFoundException("User not found");
+		}
+		
+	    if (!passwordEncoder.matches(
+	           changePasswordRequest.getCurrentPassword(),
+	            user.getPassword())) {
+	    	
+
+	        throw new InvalidUserException("Current password is incorrect");
+	    }
+	    user.setPassword(passwordEncoder.encode(changePasswordRequest.getUpdatedPassword()));
+	    userRepository.save(user);		
 	}
 	
 }
