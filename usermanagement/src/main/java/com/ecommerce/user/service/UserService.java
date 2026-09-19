@@ -20,6 +20,7 @@ import com.ecommerce.user.dto.request.UserCreateRequest;
 import com.ecommerce.user.dto.request.UserRoleStatusUpdateRequest;
 import com.ecommerce.user.dto.request.UserUpdateRequest;
 import com.ecommerce.user.dto.response.UserResponse;
+import com.ecommerce.user.enums.AccountStatus;
 import com.ecommerce.user.exceptions.InvalidUserException;
 import com.ecommerce.user.exceptions.UserNotFoundException;
 import com.ecommerce.user.model.User;
@@ -153,6 +154,22 @@ public class UserService {
 	    }
 	    user.setPassword(passwordEncoder.encode(changePasswordRequest.getUpdatedPassword()));
 	    userRepository.save(user);		
+	}
+
+
+	public void deactivate() {
+		@Nullable
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String name = authentication.getName();
+		User userByEmail = userRepository.findUserByEmail(name);
+
+	    if (userByEmail == null) {
+	        throw new UserNotFoundException("User not found");
+	    }
+		userByEmail.setAccountStatus(AccountStatus.INACTIVE);
+		userRepository.save(userByEmail);
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

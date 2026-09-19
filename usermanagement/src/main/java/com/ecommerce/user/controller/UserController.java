@@ -85,4 +85,9 @@ public class UserController {
 		 userService.updatePassword(changePasswordRequest);
 		 return "Password updated Successfully";
 	}
+	@PutMapping("/me/deactivate")
+	public String deactivateAccount() {
+		userService.deactivate();
+		return "User Account deactivated successfully";
+	}
 }
