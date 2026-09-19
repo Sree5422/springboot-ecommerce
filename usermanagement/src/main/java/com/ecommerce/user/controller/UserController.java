@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecommerce.user.dto.request.MyProfileUpdateRequest;
 import com.ecommerce.user.dto.request.UserCreateRequest;
 import com.ecommerce.user.dto.request.UserRoleStatusUpdateRequest;
 import com.ecommerce.user.dto.request.UserUpdateRequest;
@@ -70,7 +72,10 @@ public class UserController {
 	@GetMapping("/me")
 	//@PreAuthorize("hasRole('ADMIN')")
 	public UserResponse getMyProfile() {
-		return userService.getMyProfile();
-		
+		return userService.getMyProfile();	
+	}
+	@PatchMapping("/me")
+	public UserResponse updateProfile(@RequestBody @Valid MyProfileUpdateRequest myProfileUpdateRequest) {
+		return userService.updateProfile(myProfileUpdateRequest);
 	}
 }

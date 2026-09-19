@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.user.builder.UserBuilder;
+import com.ecommerce.user.dto.request.MyProfileUpdateRequest;
 import com.ecommerce.user.dto.request.UserCreateRequest;
 import com.ecommerce.user.dto.request.UserRoleStatusUpdateRequest;
 import com.ecommerce.user.dto.request.UserUpdateRequest;
@@ -108,8 +109,25 @@ public class UserService {
 		   
 				  							
 		return UserBuilder.buildUserResponseFromUser(userByEmail);
-	}	
+	}
+
+
 	
+	public UserResponse updateProfile(MyProfileUpdateRequest request) {
+
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+	    String email = authentication.getName();
+
+	     User user = userRepository.findUserByEmail(email);
+	            
+	     
+	    User updatedUser = UserBuilder.buildUserFromMyProfileUpdateRequest(user, request);
+
+	    User savedUser = userRepository.save(updatedUser);
+
+	    return UserBuilder.buildUserResponseFromUser(savedUser);
+	}
 	
 }
 	

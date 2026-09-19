@@ -2,6 +2,7 @@ package com.ecommerce.user.builder;
 
 import com.ecommerce.user.dto.request.AddressCreateRequest;
 import com.ecommerce.user.dto.request.AddressUpdateRequest;
+import com.ecommerce.user.dto.request.MyProfileUpdateRequest;
 import com.ecommerce.user.dto.request.UserCreateRequest;
 import com.ecommerce.user.dto.request.UserUpdateRequest;
 import com.ecommerce.user.dto.response.AddressResponse;
@@ -32,8 +33,8 @@ public class UserBuilder {
 	public static User buildUserFromUserUpdateRequest(User existingUser,UserUpdateRequest userUpdateRequest) {  
 		return User.builder()            
 				.userId(existingUser.getUserId())      
-				.password(userUpdateRequest.getPassword())        
-
+			//	.password(userUpdateRequest.getPassword())        
+				.password(userUpdateRequest.getPassword() != null? userUpdateRequest.getPassword(): existingUser.getPassword())
 				.userName(userUpdateRequest.getUserName() != null? userUpdateRequest.getUserName() : existingUser.getUserName())   
 				.email(userUpdateRequest.getEmail() != null? userUpdateRequest.getEmail(): existingUser.getEmail())     
 				.phoneNum(userUpdateRequest.getPhoneNum() != null? userUpdateRequest.getPhoneNum() : existingUser.getPhoneNum())   
@@ -110,5 +111,25 @@ public class UserBuilder {
 				.accountStatus(user.getAccountStatus())
 				.token(token)
 								.build();
+	}
+
+
+
+	public static User buildUserFromMyProfileUpdateRequest( User user, MyProfileUpdateRequest request) {
+
+	    user.setUserName(request.getUserName());
+	    user.setEmail(request.getEmail());
+	    user.setPhoneNum(request.getPhoneNum());
+
+	    if (request.getAddress() != null) {
+	        user.setAddress(
+	            buildAddressFromAddressUpdateRequest(
+	                user.getAddress(),
+	                request.getAddress()
+	            )
+	        );
+	    }
+
+	    return user;
 	}
 }
