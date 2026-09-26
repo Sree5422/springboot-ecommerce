@@ -2,6 +2,8 @@ package com.ecommerce.user.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,11 +44,17 @@ public class UserController {
 
 	@GetMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	public List<UserResponse> getUsers() {
+	public Page<UserResponse> getUsers(Pageable pageable) {
 		System.out.println("User called");
-		return userService.getAllUsers();
+		return userService.getAllUsers(pageable);
 		
 	}
+	// without Pageable impl
+//	public List<UserResponse> getUsers() {
+//		System.out.println("User called");
+//		return userService.getAllUsers();
+//		
+//	}
 	
 	@GetMapping("/{userId}")
 	@PreAuthorize("hasRole('ADMIN')")

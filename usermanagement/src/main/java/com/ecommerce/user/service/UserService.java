@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.jspecify.annotations.Nullable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,38 +52,24 @@ public class UserService {
 		return userResponse;
 	}
 	
-	public List<UserResponse> getAllUsers(){
-		System.out.println("User Service called");
+	public Page<UserResponse> getAllUsers(Pageable pageable){
+		System.out.println("Pageable User Service called");
 
-		return userRepository.findAll()
-							  .stream()
-							  .map(UserBuilder::buildUserResponseFromUser)
-							  .toList();
-		
-	
+		return userRepository.findAll(pageable)
+							  
+							  .map(UserBuilder::buildUserResponseFromUser);
+							  
 	}
-//	@Transactional(propagation = Propagation.REQUIRED)
-//	public UserResponse updateUserById(long userId, UserUpdateRequest updateRequest) {
+	
+//	public List<UserResponse> getAllUsers(){
+//		System.out.println("User Service called");
 //
-//	    User existingUser = userRepository.findById(userId)
-//	        .orElseThrow(() ->
-//	            new UserNotFoundException(
-//	                "User not found with userId " + userId));
-//
-//	    User updatedUser =
-//	        UserBuilder.buildUserFromUserUpdateRequest(
-//	            existingUser, updateRequest);
-//
-//	    updatedUser.setPassword(
-//	        passwordEncoder.encode(updatedUser.getPassword()));
-//
-//	    User saved = userRepository.saveAndFlush(updatedUser);
-//
-//	    throw new RuntimeException("Testing transaction rollback");
-//	
-//
-//	    // return UserBuilder.buildUserResponseFromUser(saved);
+//		return userRepository.findAll()
+//							  .stream()
+//							  .map(UserBuilder::buildUserResponseFromUser)
+//							  .toList();
 //	}
+
 	
 	@Transactional(propagation  = Propagation.REQUIRED)
 	public UserResponse updateUserById(long userId, UserUpdateRequest updateRequest) {
