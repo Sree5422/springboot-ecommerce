@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerce.user.builder.UserBuilder;
 import com.ecommerce.user.dto.request.ChangePasswordRequest;
@@ -58,11 +60,36 @@ public class UserService {
 		
 	
 	}
+//	@Transactional(propagation = Propagation.REQUIRED)
+//	public UserResponse updateUserById(long userId, UserUpdateRequest updateRequest) {
+//
+//	    User existingUser = userRepository.findById(userId)
+//	        .orElseThrow(() ->
+//	            new UserNotFoundException(
+//	                "User not found with userId " + userId));
+//
+//	    User updatedUser =
+//	        UserBuilder.buildUserFromUserUpdateRequest(
+//	            existingUser, updateRequest);
+//
+//	    updatedUser.setPassword(
+//	        passwordEncoder.encode(updatedUser.getPassword()));
+//
+//	    User saved = userRepository.saveAndFlush(updatedUser);
+//
+//	    throw new RuntimeException("Testing transaction rollback");
+//	
+//
+//	    // return UserBuilder.buildUserResponseFromUser(saved);
+//	}
 	
+	@Transactional(propagation  = Propagation.REQUIRED)
 	public UserResponse updateUserById(long userId, UserUpdateRequest updateRequest) {
 		User existingUser = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("User not found with userId"+ userId));
 	     User updatedUser = UserBuilder.buildUserFromUserUpdateRequest(existingUser, updateRequest);
+
 	     updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+	     
 	     User saved = userRepository.save(updatedUser);
 	     return UserBuilder.buildUserResponseFromUser(saved);
 	     
@@ -180,19 +207,7 @@ public class UserService {
 	
 	
 	
-//	public UserResponse save(UserCreateRequest userCreateRequest) {
-//		
-//		User user=UserBuilder.buildUserFromCreateRequest(userCreateRequest);
-//		User savedUser= userRepository.save(user);
-//		UserResponse userResponse = UserBuilder.buildUserResponseFromUser(savedUser);
-//		return userResponse;	
-//	}
-//	
-//	public List<UserResponse> getAllUser(){
-//		return userRepository.findAll()
-//					   .stream().map(UserBuilder::buildUserResponseFromUser)
-//					   .toList();
-//	}
+
 	
 	
 	
