@@ -53,9 +53,9 @@ public class UserService {
 	}
 	
 	public Page<UserResponse> getAllUsers(Pageable pageable){
-		System.out.println("Pageable User Service called");
+		System.out.println(" N+1 Pageable User Service called");
 
-		return userRepository.findAll(pageable)
+		return userRepository.findAllBy(pageable)
 							  
 							  .map(UserBuilder::buildUserResponseFromUser);
 							  
