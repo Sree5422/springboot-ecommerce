@@ -32,7 +32,8 @@ public class UserBuilder {
 
 	public static User buildUserFromUserUpdateRequest(User existingUser,UserUpdateRequest userUpdateRequest) {  
 		return User.builder()            
-				.userId(existingUser.getUserId())      
+				.userId(existingUser.getUserId())  
+				.version(existingUser.getVersion())
 			//	.password(userUpdateRequest.getPassword())        
 				.password(userUpdateRequest.getPassword() != null? userUpdateRequest.getPassword(): existingUser.getPassword())
 				.userName(userUpdateRequest.getUserName() != null? userUpdateRequest.getUserName() : existingUser.getUserName())   

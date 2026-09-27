@@ -2,6 +2,7 @@ package com.ecommerce.user.exceptions;
 
 import java.util.stream.Collectors;
 
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+
+import jakarta.persistence.OptimisticLockException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -75,5 +78,23 @@ public class GlobalExceptionHandler {
 	   return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 			   									.body(errorResponse);
 	}
+	
+	@ExceptionHandler(OptimisticLockingFailureException.class)
+	public ResponseEntity<ErrorResponse> handleOptimistic(OptimisticLockingFailureException ex, WebRequest request) {
+
+	    String path = request.getDescription(false).replace("uri=", "");
+
+	    ErrorResponse errorResponse = new ErrorResponse();
+
+	    errorResponse.setStatus(HttpStatus.CONFLICT.value());
+	    errorResponse.setError("Optimistic Lock Conflict");
+	    errorResponse.setMessage("The user was modified by another transaction. Please refresh and try again.");
+	    errorResponse.setPath(path);
+
+	    return ResponseEntity.status(HttpStatus.CONFLICT)
+	    					 .body(errorResponse);
+	
+	}
+	
 
 }
