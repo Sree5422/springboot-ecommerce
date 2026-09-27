@@ -6,6 +6,7 @@ import com.ecommerce.user.enums.Role;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -19,13 +20,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+
 @Entity
 @Table(name="users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id
@@ -51,6 +59,13 @@ public class User {
     @JoinColumn(name="address_id")
     
     private Address address;
+    
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
 //	public User(String userName, String email, String password, String phoneNum, Address address) {
 //		super();
