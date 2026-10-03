@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.jspecify.annotations.Nullable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -72,6 +75,7 @@ public class UserService {
 
 	
 	@Transactional(propagation  = Propagation.REQUIRED)
+	@CacheEvict(value = "users",key = "#userId")
 	public UserResponse updateUserById(long userId, UserUpdateRequest updateRequest) {
 		User existingUser = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("User not found with userId"+ userId));
 	     User updatedUser = UserBuilder.buildUserFromUserUpdateRequest(existingUser, updateRequest);
@@ -83,14 +87,15 @@ public class UserService {
 	     
 	}
 
-
+	@Cacheable(value = "users",key ="#userId")
+	
 	public UserResponse getUserById(long userId) {
 		User user = userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("User not found"+userId));
 		
 		return UserBuilder.buildUserResponseFromUser(user);
 	}
 
-
+	@CacheEvict(value = "users",key = "#userId ")
 	public String deleteByUserId(long userId) {
 		if(!userRepository.existsById(userId)) {
 			throw new RuntimeException(("User not found to delete"+ userId));
